@@ -1,19 +1,39 @@
 import React, { Component }from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-export default class FlexDirectionBasics extends Component {
+export default class JustifyContentBasics extends Component {
   render () {
     return (
       <View style={style.container}>
-        <View style={[style.container, style.subContainer]}>
-          <View style={[style.itemSize, {backgroundColor: 'powderblue'}]} />
-          <View style={[style.itemSize, {backgroundColor: 'skyblue', height: 50}]} />
-          <View style={[style.itemSize, {backgroundColor: 'steelblue'}]} />
+        <View style={{flex: 1, justifyContent:'flex-start', backgroundColor: 'red'}}>
+          <View style={[style.itemSize, style.itemStyle1]} />
+          <View style={[style.itemSize, style.itemStyle2]} />
+          <View style={[style.itemSize, style.itemStyle3]} />
         </View>
-        <View style={[style.container, style.subContainer]}>
-          <View style={[style.itemSize, {backgroundColor: 'powderblue'}]} />
-          <View style={[style.itemSize, {backgroundColor: 'skyblue', height: 50}]} />
-          <View style={[style.itemSize, {backgroundColor: 'steelblue'}]} />
+        <View style={{flex: 1, justifyContent:'center', backgroundColor: 'green'}}>
+          <View style={[style.itemSize, style.itemStyle1]} />
+          <View style={[style.itemSize, style.itemStyle2]} />
+          <View style={[style.itemSize, style.itemStyle3]} />
+        </View>
+        <View style={{flex: 1, justifyContent:'flex-end', backgroundColor: 'blue'}}>
+          <View style={[style.itemSize, style.itemStyle1]} />
+          <View style={[style.itemSize, style.itemStyle2]} />
+          <View style={[style.itemSize, style.itemStyle3]} />
+        </View>
+        <View style={{flex: 1, justifyContent:'space-around', backgroundColor: 'red'}}>
+          <View style={[style.itemSize, style.itemStyle1]} />
+          <View style={[style.itemSize, style.itemStyle2]} />
+          <View style={[style.itemSize, style.itemStyle3]} />
+        </View>
+        <View style={{flex: 1, justifyContent:'space-between', backgroundColor: 'green'}}>
+          <View style={[style.itemSize, style.itemStyle1]} />
+          <View style={[style.itemSize, style.itemStyle2]} />
+          <View style={[style.itemSize, style.itemStyle3]} />
+        </View>
+        <View style={{flex: 1, justifyContent:'space-evenly', backgroundColor: 'blue'}}>
+          <View style={[style.itemSize, style.itemStyle1]} />
+          <View style={[style.itemSize, style.itemStyle2]} />
+          <View style={[style.itemSize, style.itemStyle3]} />
         </View>
       </View>
     );
@@ -22,22 +42,24 @@ export default class FlexDirectionBasics extends Component {
 
 const style = StyleSheet.create({
   container: {
-    flex: 1, 
-    margin: 10, 
-    backgroundColor: 'black',
-    borderColor: 'black', 
-    borderWidth: 1, 
-    borderRadius: 44
-  },
-  subContainer: {
-    backgroundColor: 'white',
-    // 默认是column
-    flexDirection: 'row',
-    borderColor: 'blue',
-    borderRadius: 0
+    flex: 1,
+    flexDirection: 'column',
+    marginTop: 30,
+    marginBottom: 30,
+    borderColor: 'red',
+    borderWidth: 1
   },
   itemSize: {
-    width: 50,
-    flex: 1
+    width: 30, 
+    height: 30
+  },
+  itemStyle1: {
+    backgroundColor: 'powderblue'
+  },
+  itemStyle2: {
+    backgroundColor: 'skyblue'
+  },
+  itemStyle3: {
+    backgroundColor: 'steelblue'
   }
 });
