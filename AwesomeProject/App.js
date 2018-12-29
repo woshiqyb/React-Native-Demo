@@ -1,22 +1,40 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Button, Alert, StyleSheet, View } from 'react-native';
 
-export default class PizzaTranslator extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { text: ''};
+export default class ButtonBasics extends Component {
+  onPressButton() {
+    Alert.alert('你点击了Button！')
   }
 
-  render () {
-    return (
-      <View>
-        <TextInput style={{height:50, marginTop:44, borderColor:'red', borderWidth:1}} placeholder="请输入待翻译的文字" onChangeText={ (text) => {
-          this.setState({text: text})
-        } } />
-        <Text style={{fontSize:20, fontWeight:'bold'}}>
-          { this.state.text.split(' ').map((word) => word && '🍕').join(' ') }
-        </Text>
+  render() {
+    return(
+      <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <Button onPress={this.onPressButton} title='点击我'/>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button onPress={this.onPressButton} title="点击我" color="#841584" />
+        </View>
+        <View style={styles.alternativeLayoutButtonContainer}>
+          <Button onPress={this.onPressButton} title="This looks great!" />
+          <Button onPress={this.onPressButton} title="OK!" color="#841584" />
+        </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    margin: 20
+  },
+  alternativeLayoutButtonContainer: {
+    margin: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
+});
