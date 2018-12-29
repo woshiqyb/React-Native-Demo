@@ -1,23 +1,43 @@
 import React, { Component }from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default class FixedDimensionsBasics extends Component {
+export default class FlexDirectionBasics extends Component {
   render () {
     return (
-      <View style={{flex: 1, paddingTop: 44}}>
-        <View style={{flex: 1, borderColor: 'blue', borderWidth: 1}}>
-          <Text style={{fontSize: 30, fontWeight: 'bold'}}>固定宽高:</Text>
-          <View style={{width: 50, height: 50, backgroundColor: 'powderblue'}}></View>
-          <View style={{width: 100, height: 100, backgroundColor: 'skyblue'}}></View>
-          <View style={{width: 150, height: 150, backgroundColor: 'skyblue'}}></View>
+      <View style={style.container}>
+        <View style={[style.container, style.subContainer]}>
+          <View style={[style.itemSize, {backgroundColor: 'powderblue'}]} />
+          <View style={[style.itemSize, {backgroundColor: 'skyblue', height: 50}]} />
+          <View style={[style.itemSize, {backgroundColor: 'steelblue'}]} />
         </View>
-        <View style={{flex: 1, borderColor: 'red', borderWidth: 1}}>
-          <Text style={{fontSize: 30, fontWeight: 'bold'}}>弹性宽高(Flex):</Text>
-          <View style={{flex: 1, backgroundColor: 'powderblue'}} />
-          <View style={{flex: 2, backgroundColor: 'skyblue'}} />
-          <View style={{flex: 3, backgroundColor: 'steelblue'}} />
+        <View style={[style.container, style.subContainer]}>
+          <View style={[style.itemSize, {backgroundColor: 'powderblue'}]} />
+          <View style={[style.itemSize, {backgroundColor: 'skyblue', height: 50}]} />
+          <View style={[style.itemSize, {backgroundColor: 'steelblue'}]} />
         </View>
       </View>
     );
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1, 
+    margin: 10, 
+    backgroundColor: 'black',
+    borderColor: 'black', 
+    borderWidth: 1, 
+    borderRadius: 44
+  },
+  subContainer: {
+    backgroundColor: 'white',
+    // 默认是column
+    flexDirection: 'row',
+    borderColor: 'blue',
+    borderRadius: 0
+  },
+  itemSize: {
+    width: 50,
+    flex: 1
+  }
+});
