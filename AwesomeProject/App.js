@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
-export default class Bananas extends Component {
+// props: name --- required
+class Greeting extends Component {
   render () {
-    let pic = {
-      uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-    };
+    return (
+      <Text>Hello, {this.props.name}</Text>
+    );
+  }
+}
+
+export default class LogsOfGreeting extends Component {
+  render () {
     return (
       <View style={style.container}>
-        <Image source={pic} style={style.imageSize} />
+        <Greeting name='qianyb'/>
+        <Greeting name='yangtq'/>
       </View>
     );
   }
