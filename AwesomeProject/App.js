@@ -1,52 +1,43 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Button, NavigatorIOS, Text, ScrollView } from 'react-native';
+import { Animated, Text, View } from 'react-native';
 
-export default class NavigatorIOSApp extends Component {
+export default class App extends Component {
   render() {
     return (
-      <NavigatorIOS initialRoute={{
-        component: MyScene,
-        title: 'My Initial Scene',
-        passProps: { index: 1 }
-      }} style={{flex: 1}} translucent={false}/>
+      <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+        <FadeInView style={{width: 250, height: 50, backgroundColor: 'powderblue'}}>
+          <Text style={{fontSize: 20, textAlign:'center', margin: 10}}>
+            Fade In
+          </Text>
+        </FadeInView>
+      </View>
     );
   }
 }
 
-class MyScene extends Component {
-  static propTypes = {
-    route: PropTypes.shape({
-      title: PropTypes.string.isRequired
-    }),
-    navigator: PropTypes.object.isRequired
-  };
-
+class FadeInView extends Component {
   constructor(props) {
     super(props);
-    this._onForward = this._onForward.bind(this);
+    // 透明度初始值设为0
+    this.state = { fadeAnim: new Animated.Value(0) };
   }
 
-  _onForward() {
-    let nextIndex = ++this.props.index;
-    this.props.navigator.push({
-      component: MyScene,
-      title: 'Scene' + nextIndex,
-      passProps: { index: nextIndex }
-    });
+  componentDidMount() {
+    Animated.timing(this.state.fadeAnim, {
+      toValue: 1,
+      duration: 1000
+    }).start();
   }
 
   render() {
+    let {fadeAnim} = this.state;
     return (
-      // 用View包裹返回时会报错，用ScrollView包裹可正常运行，貌似是新版的bug。
-      // 详情见https://stackoverflow.com/questions/47118487/unsupported-top-level-event-type-topscroll-dispatched
-      
-      // debugger发现用this.props.route.title才能到title
-      // debugger参考：https://reactnative.cn/docs/debugging/
-      <ScrollView style={{flex: 1,  backgroundColor: 'red'}} scrollEnabled={false}>
-        <Text>Current Scene:{this.props.route.title}</Text>
-        <Button onPress={this._onForward} title="点我加载下一页"/>
-      </ScrollView>
+      <Animated.View style={{
+        ...this.props.style,
+        opacity: fadeAnim
+      }}>
+        {this.props.children}
+      </Animated.View>
     );
   }
 }
