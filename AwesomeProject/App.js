@@ -1,95 +1,52 @@
-
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, View, ActivityIndicator, FlatList, Alert } from 'react-native';
+import PropTypes from 'prop-types';
+import { Button, NavigatorIOS, Text, ScrollView } from 'react-native';
 
-const REQUEST_URL = "https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json";
-
-class TailText extends Component {
+export default class NavigatorIOSApp extends Component {
   render() {
     return (
-      <Text numberOfLines={3} style={this.props.style}>{this.props.text}</Text>
+      <NavigatorIOS initialRoute={{
+        component: MyScene,
+        title: 'My Initial Scene',
+        passProps: { index: 1 }
+      }} style={{flex: 1}} translucent={false}/>
     );
   }
 }
-export default class MovieList extends Component {
-  constructor(props){
+
+class MyScene extends Component {
+  static propTypes = {
+    route: PropTypes.shape({
+      title: PropTypes.string.isRequired
+    }),
+    navigator: PropTypes.object.isRequired
+  };
+
+  constructor(props) {
     super(props);
-    this.state = {
-      isLoading: true,
-      movies: []
-    }
+    this._onForward = this._onForward.bind(this);
   }
 
-  componentWillMount() {
-    fetch(REQUEST_URL)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        isLoading: false,
-        movies: responseJson.movies
-      });
-    })
-    .catch((error) => console.log(error))
+  _onForward() {
+    let nextIndex = ++this.props.index;
+    this.props.navigator.push({
+      component: MyScene,
+      title: 'Scene' + nextIndex,
+      passProps: { index: nextIndex }
+    });
   }
 
   render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size='large'/>
-          <Text>正在加载电影数据...</Text>
-        </View>
-      );
-    } else {
-      return (
-        <FlatList 
-          style={styles.list} 
-          data={this.state.movies} 
-          renderItem={({item, index}) => 
-            <View style={[styles.container, index==0?{paddingTop:30}:(index==this.state.movies.length-1?{paddingBottom:30}:{})]}>
-              <Image style={[styles.thumbnail, {borderColor: 'blue', borderWidth: 1}]} source={{uri:item.posters.thumbnail}}/>
-              <View style={{flex:1}}>
-                <TailText style={styles.title} text={"电影名称："+item.title} />
-                <TailText style={styles.year} text={"上映年份："+item.year} />
-              </View>
-            </View>
-          } 
-          keyExtractor={(item,_) => item.id}/>
-      );
-    }
+    return (
+      // 用View包裹返回时会报错，用ScrollView包裹可正常运行，貌似是新版的bug。
+      // 详情见https://stackoverflow.com/questions/47118487/unsupported-top-level-event-type-topscroll-dispatched
+      
+      // debugger发现用this.props.route.title才能到title
+      // debugger参考：https://reactnative.cn/docs/debugging/
+      <ScrollView style={{flex: 1,  backgroundColor: 'red'}} scrollEnabled={false}>
+        <Text>Current Scene:{this.props.route.title}</Text>
+        <Button onPress={this._onForward} title="点我加载下一页"/>
+      </ScrollView>
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    backgroundColor: '#F5FCFF'
-  },
-  thumbnail: {
-    width: 53,
-    height: 80
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 8,
-    height: 50
-  },
-  list: {
-    // paddingTop: 40,
-    // padding: 40,
-    backgroundColor: '#F5FCFF'
-  }
-});
-
-const MOCKED_MOVIES_DATA = [
-  {
-    title: '标题',
-    year: '2015',
-    posters: {
-      thumbnail: 'https://i.imgur.com/UePbdph.jpg'
-    }
-  }
-];
