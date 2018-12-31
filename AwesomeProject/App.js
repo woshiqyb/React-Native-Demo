@@ -1,43 +1,77 @@
 import React, { Component } from 'react';
-import { Animated, Text, View } from 'react-native';
+import { NativeModules, LayoutAnimation, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 
+const { UIManager } = NativeModules;
+
+UIManager.setLayoutAnimationEnabledExperimental 
+&& UIManager.setLayoutAnimationEnabledExperimental(true);
+
+const INITIAL_W = 100;
+const INITIAL_H = 100;
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      w: INITIAL_W,
+      h: INITIAL_H
+    };
+    this._onPress = this._onPress.bind(this);
+  }
+
+  _onPress() {
+    LayoutAnimation.spring();
+    this.setState((prevState) => ({
+      w: prevState.w + 15,
+      h: prevState.h + 15
+    }));
+  }
+
   render() {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
-        <FadeInView style={{width: 250, height: 50, backgroundColor: 'powderblue'}}>
-          <Text style={{fontSize: 20, textAlign:'center', margin: 10}}>
-            Fade In
-          </Text>
-        </FadeInView>
+      <View style={styles.container}>
+        <View style={[styles.box, {width: this.state.w, height: this.state.h}]} />
+        <TouchableOpacity onPress={this._onPress}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Press me!</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          LayoutAnimation.easeInEaseOut();
+          this.setState({
+            w: INITIAL_W,
+            h: INITIAL_H
+          });
+        }}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Reset style!</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
 }
 
-class FadeInView extends Component {
-  constructor(props) {
-    super(props);
-    // 透明度初始值设为0
-    this.state = { fadeAnim: new Animated.Value(0) };
-  }
-
-  componentDidMount() {
-    Animated.timing(this.state.fadeAnim, {
-      toValue: 1,
-      duration: 1000
-    }).start();
-  }
-
-  render() {
-    let {fadeAnim} = this.state;
-    return (
-      <Animated.View style={{
-        ...this.props.style,
-        opacity: fadeAnim
-      }}>
-        {this.props.children}
-      </Animated.View>
-    );
-  }
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box: {
+    width: 200,
+    height: 200,
+    backgroundColor: 'red',
+  },
+  button: {
+    backgroundColor: 'black',
+    width: 100,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+});
