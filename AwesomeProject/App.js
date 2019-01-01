@@ -12,6 +12,7 @@ export default class App extends Component {
 
   render() {
     return (
+      <KeyboardAvoidingView behavior="padding" style={styles.form}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
         <View style={styles.header}>
@@ -32,7 +33,6 @@ export default class App extends Component {
           }}>
             <Text style={styles.label}>With hitSlop</Text>
           </TouchableOpacity>
-          <KeyboardAvoidingView behavior="padding" style={styles.form}>
           <TextInput
             style={styles.input}
             value={"this.state.email"}
@@ -53,9 +53,9 @@ export default class App extends Component {
               Some important legal fine print here
             </Text>
           </View>
-        </KeyboardAvoidingView>
         </View>
       </View>
+      </KeyboardAvoidingView>
     );
   }
 }
